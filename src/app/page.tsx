@@ -40,7 +40,7 @@ const WeatherIcon: React.FC<{ condition: string }> = ({ condition }) => {
 const WeatherDashboard: React.FC = () => {
   const today = new Date();
   const fourteenDaysAgo = subDays(today, 7);
-  const sevenDaysAgo = subDays(today, 7);
+  
 
   const [weatherData, setWeatherData] = useState<WeatherData[]>([]);
   const [forecastData, setForecastData] = useState<WeatherData[]>([]);
