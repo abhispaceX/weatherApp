@@ -46,8 +46,8 @@ const WeatherDashboard: React.FC = () => {
   const [forecastData, setForecastData] = useState<WeatherData[]>([]);
   const [currentWeather, setCurrentWeather] = useState<CurrentWeather[]>([]);
   const [city, setCity] = useState('London');
-  const [startDate, setStartDate] = useState<Date | null>(sevenDaysAgo);
-  const [endDate, setEndDate] = useState<Date | null>(today);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
 
  
   const fetchCurrentWeather = useCallback(async () => {
@@ -159,6 +159,7 @@ const WeatherDashboard: React.FC = () => {
                 startDate={startDate ?? undefined}
                 endDate={endDate ?? undefined}
                 minDate={fourteenDaysAgo}
+                placeholderText="dd-MM-yyyy"
                 maxDate={today}
                 dateFormat="dd-MM-yyyy"
                 className="border rounded px-2 py-1"
@@ -175,6 +176,7 @@ const WeatherDashboard: React.FC = () => {
                 minDate={startDate ? startDate : fourteenDaysAgo}
                 maxDate={today}
                 disabled={!startDate}
+                placeholderText="dd-MM-yyyy"
                 dateFormat="dd-MM-yyyy"
                 className="border rounded px-2 py-1"
               />
