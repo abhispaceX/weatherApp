@@ -7,18 +7,26 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const city = searchParams.get('city') || 'London';
 
-  const response = await fetch(`${BASE_URL}/current.json?key=${API_KEY}&q=${city}&aqi=no`);
-  
-  if (!response.ok) {
-    return NextResponse.json({ error: 'Failed to fetch weather data' }, { status: response.status });
+  try {
+    const response = await fetch(`${BASE_URL}/current.json?key=${API_KEY}&q=${city}&aqi=no`);
+    
+    if (!response.ok) {
+      throw new Error(`API responded with status ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    // Simulating multiple sensors
+    const sensors = ['A', 'B', 'C'].map(id => ({
+      id: `sensor${id}`,
+      temperature: data.current.temp_c + Math.random() * 2 - 1, // Add some variation
+      humidity: data.current.humidity + Math.random() * 5 - 2.5,
+      pressure: data.current.pressure_mb + Math.random() * 10 - 5
+    }));
+
+    return NextResponse.json(sensors);
+  } catch (error) {
+    console.error('Error fetching current weather:', error);
+    return NextResponse.json({ error: 'Failed to fetch current weather data' }, { status: 500 });
   }
-
-  const data = await response.json();
-
-  return NextResponse.json({
-    id: 'sensor1',
-    temperature: data.current.temp_c,
-    humidity: data.current.humidity,
-    pressure: data.current.pressure_mb
-  });
 }
