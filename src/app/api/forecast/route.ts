@@ -3,6 +3,20 @@ import { NextResponse } from 'next/server';
 const API_KEY = process.env.WEATHER_API_KEY;
 const BASE_URL = 'http://api.weatherapi.com/v1';
 
+interface ForecastDay {
+  date: string;
+  day: {
+    avgtemp_c: number;
+    avghumidity: number;
+    condition: {
+      text: string;
+    };
+  };
+  hour: Array<{
+    pressure_mb: number;
+  }>;
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const city = searchParams.get('city') || 'London';
@@ -35,7 +49,7 @@ export async function GET(request: Request) {
       throw new Error('Invalid data structure');
     }
 
-    const processedData = forecastData.map((day: any) => ({
+    const processedData = forecastData.map((day: ForecastDay) => ({
       date: day.date,
       temperature: day.day.avgtemp_c,
       humidity: day.day.avghumidity,

@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -49,12 +49,8 @@ const WeatherDashboard: React.FC = () => {
   const [startDate, setStartDate] = useState<Date | null>(sevenDaysAgo);
   const [endDate, setEndDate] = useState<Date | null>(today);
 
-  useEffect(() => {
-    fetchWeatherData();
-    fetchCurrentWeather();
-  }, [city]);
-
-  const fetchCurrentWeather = async () => {
+ 
+  const fetchCurrentWeather = useCallback(async () => {
     try {
       const response = await fetch(`/api/current?city=${city}`);
       const data = await response.json();
@@ -62,9 +58,9 @@ const WeatherDashboard: React.FC = () => {
     } catch (error) {
       console.error('Error fetching current weather:', error);
     }
-  };
+  }, [city]);
 
-  const fetchWeatherData = async () => {
+  const fetchWeatherData = useCallback(async () => {
     try {
       const response = await fetch(`/api/forecast?city=${city}&days=30`);
       const data = await response.json();
@@ -74,7 +70,12 @@ const WeatherDashboard: React.FC = () => {
     } catch (error) {
       console.error('Error fetching weather data:', error);
     }
-  };
+  }, [city]);
+  useEffect(() => {
+    fetchCurrentWeather();
+    fetchWeatherData();
+  }, [fetchCurrentWeather, fetchWeatherData]);
+
 
   const fetchForecastData = async () => {
     if (!startDate || !endDate) return;
