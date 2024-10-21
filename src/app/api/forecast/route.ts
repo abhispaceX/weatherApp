@@ -7,20 +7,29 @@ interface ForecastDay {
   date: string;
   day: {
     avgtemp_c: number;
+    maxtemp_c: number;
+    mintemp_c: number;
     avghumidity: number;
+    daily_chance_of_rain: number;
     condition: {
       text: string;
+      icon: string;
     };
+    avgpressure_mb: number; // Add this field to your interface
   };
   hour: Array<{
+    time: string;
+    temp_c: number;
+    wind_kph: number;
     pressure_mb: number;
+    chance_of_rain: number;
   }>;
 }
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const city = searchParams.get('city') || 'London';
-  const days = searchParams.get('days') || '30';
+  const days = searchParams.get('days') || '7';
   const start_date = searchParams.get('start_date');
   const end_date = searchParams.get('end_date');
 
@@ -33,7 +42,7 @@ export async function GET(request: Request) {
     }
 
     const response = await fetch(url);
-    
+
     if (!response.ok) {
       throw new Error(`API responded with status ${response.status}`);
     }
@@ -52,9 +61,20 @@ export async function GET(request: Request) {
     const processedData = forecastData.map((day: ForecastDay) => ({
       date: day.date,
       temperature: day.day.avgtemp_c,
+      maxTemp: day.day.maxtemp_c,
+      minTemp: day.day.mintemp_c,
       humidity: day.day.avghumidity,
-      pressure: day.hour[12].pressure_mb,
-      condition: day.day.condition.text
+      precipitation: day.day.daily_chance_of_rain,
+      condition: day.day.condition.text,
+      conditionIcon: day.day.condition.icon,
+      pressure: day.day.avgpressure_mb || day.hour.reduce((sum, hour) => sum + hour.pressure_mb, 0) / day.hour.length, // Use average pressure if available, otherwise calculate from hourly data
+      hourly: day.hour.map(hour => ({
+        time: hour.time,
+        temp: hour.temp_c,
+        wind: hour.wind_kph,
+        pressure: hour.pressure_mb,
+        chanceOfRain: hour.chance_of_rain
+      }))
     }));
 
     return NextResponse.json(processedData);
