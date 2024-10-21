@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Sun, Cloud, CloudRain, Droplets, Wind, Thermometer } from 'lucide-react';
+
 
 interface HourlyData {
   time: string;
