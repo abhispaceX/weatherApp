@@ -84,7 +84,7 @@ const DailyForecast: React.FC<DailyForecastProps> = ({
                     fontSize: '12px' 
                   }} 
                   labelStyle={{ color: '#fff' }}
-                  formatter={(value, name) => [`${value}°C`, 'Temperature']}
+                  formatter={(value) => [`${value}°C`, 'Temperature']}
                 />
                 <Line 
                   type="monotone" 
