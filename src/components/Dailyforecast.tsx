@@ -41,71 +41,74 @@ const DailyForecast: React.FC<DailyForecastProps> = ({
 }) => {
   const formattedHourly = hourly.map(h => ({
     ...h,
-    time: new Date(h.time).getHours() + ':00'
+    time: new Date(h.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   }));
 
   return (
     <Card className="bg-gray-900 text-white shadow-2xl rounded-2xl overflow-hidden border-t border-l border-gray-800">
-      <CardContent className="p-4 sm:p-6 md:p-8 lg:p-10">
-        <div className="flex justify-between items-center mb-6">
+      <CardContent className="p-3 sm:p-4 md:p-6 lg:p-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6">
           <div>
-            <h2 className="text-3xl font-bold">{new Date(date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</h2>
-            <p className="text-xl">{condition}</p>
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">{new Date(date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</h2>
+            <p className="text-lg sm:text-xl">{condition}</p>
           </div>
-          <div className="text-right">
-            <p className="text-4xl font-bold">{temperature}°C</p>
-            <p className="text-lg">Precipitation: {precipitation}%</p>
-            <p className="text-lg">Humidity: {humidity}%</p>
+          <div className="text-right mt-2 sm:mt-0">
+            <p className="text-2xl sm:text-3xl md:text-4xl font-bold">{temperature}°C</p>
+            <p className="text-sm sm:text-base">Precipitation: {precipitation}%</p>
+            <p className="text-sm sm:text-base">Humidity: {humidity}%</p>
           </div>
         </div>
 
-        <div className="mb-8">
-          <ResponsiveContainer width="100%" height={200}>
-            <LineChart data={formattedHourly}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#555" />
-              <XAxis dataKey="time" stroke="#888" />
-              <YAxis stroke="#888" />
-              <Tooltip contentStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.8)', border: 'none' }} />
-              <Line type="monotone" dataKey="temp" stroke="#fbbf24" strokeWidth={2} dot={false} />
-            </LineChart>
-          </ResponsiveContainer>
+        <div className="mb-4 sm:mb-6">
+          <div className="h-48 sm:h-64 md:h-80">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={formattedHourly}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#555" />
+                <XAxis 
+                  dataKey="time" 
+                  stroke="#888" 
+                  tick={{fontSize: 10}}
+                  interval={'preserveStartEnd'}
+                  tickFormatter={(value) => value.split(':')[0]}
+                />
+                <YAxis 
+                  stroke="#888" 
+                  tick={{fontSize: 10}}
+                  domain={['dataMin - 5', 'dataMax + 5']}
+                />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)', 
+                    border: 'none', 
+                    borderRadius: '4px',
+                    fontSize: '12px' 
+                  }} 
+                  labelStyle={{ color: '#fff' }}
+                  formatter={(value, name) => [`${value}°C`, 'Temperature']}
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="temp" 
+                  stroke="#fbbf24" 
+                  strokeWidth={2} 
+                  dot={false}
+                  activeDot={{ r: 6 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
         </div>
 
-        <div className="grid grid-cols-7 gap-4 mb-8">
+        <div className="grid grid-cols-4 sm:grid-cols-7 gap-2 sm:gap-4">
           {weeklyForecast.map((day, index) => (
             <div key={index} className="text-center">
-              <p className="text-sm">{new Date(day.date).toLocaleDateString('en-US', { weekday: 'short' })}</p>
-              <img src={day.conditionIcon} alt={day.condition} className="w-8 h-8 mx-auto my-2" />
-              <p className="text-sm font-bold">{day.maxTemp}°</p>
-              <p className="text-sm text-gray-400">{day.minTemp}°</p>
+              <p className="text-xs sm:text-sm">{new Date(day.date).toLocaleDateString('en-US', { weekday: 'short' })}</p>
+              <img src={day.conditionIcon} alt={day.condition} className="w-6 h-6 sm:w-8 sm:h-8 mx-auto my-1 sm:my-2" />
+              <p className="text-xs sm:text-sm font-bold">{day.maxTemp}°</p>
+              <p className="text-xs sm:text-sm text-gray-400">{day.minTemp}°</p>
             </div>
           ))}
         </div>
-
-        {/* <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left text-gray-300">
-            <thead className="text-xs uppercase bg-gray-800">
-              <tr>
-                <th scope="col" className="px-6 py-3">Time</th>
-                <th scope="col" className="px-6 py-3">Temperature</th>
-                <th scope="col" className="px-6 py-3">Wind</th>
-                <th scope="col" className="px-6 py-3">Pressure</th>
-                <th scope="col" className="px-6 py-3">Chance of Rain</th>
-              </tr>
-            </thead>
-            <tbody>
-              {formattedHourly.map((hour, index) => (
-                <tr key={index} className="border-b border-gray-700">
-                  <td className="px-6 py-4">{hour.time}</td>
-                  <td className="px-6 py-4">{hour.temp}°C</td>
-                  <td className="px-6 py-4">{hour.wind} km/h</td>
-                  <td className="px-6 py-4">{hour.pressure} hPa</td>
-                  <td className="px-6 py-4">{hour.chanceOfRain}%</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div> */}
       </CardContent>
     </Card>
   );

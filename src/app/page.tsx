@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
-import {  Droplets, Wind, Thermometer, MapPin } from 'lucide-react'
+import { Droplets, Wind, Thermometer, MapPin } from 'lucide-react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { subDays, differenceInDays, format } from 'date-fns'
@@ -127,19 +127,19 @@ const WeatherDashboard: React.FC = () => {
   const todaysForecast = useMemo(() => weatherData[0], [weatherData])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300 p-4 md:p-6 lg:p-8 font-sans">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300 p-2 sm:p-4 md:p-6 lg:p-8 font-sans">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="max-w-7xl mx-auto"
       >
-        <Card className="bg-white/90 backdrop-blur-lg shadow-2xl rounded-2xl overflow-hidden border-t border-l border-white/50 mb-8">
-          <CardContent className="p-4 sm:p-6 md:p-8 lg:p-10">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 sm:mb-8 text-center text-blue-900 tracking-tight">Weather Forecast</h1>
+        <Card className="bg-white/90 backdrop-blur-lg shadow-2xl rounded-2xl overflow-hidden border-t border-l border-white/50 mb-4 sm:mb-8">
+          <CardContent className="p-3 sm:p-4 md:p-6 lg:p-8">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 md:mb-8 text-center text-blue-900 tracking-tight">Weather Forecast</h1>
             
             {/* City Selection */}
-            <div className="mb-6 max-w-md mx-auto">
+            <div className="mb-4 sm:mb-6 max-w-md mx-auto">
               <label htmlFor="city-select" className="block text-sm font-medium text-gray-700 mb-2">
                 Select a city
               </label>
@@ -169,22 +169,24 @@ const WeatherDashboard: React.FC = () => {
 
             {/* Today's Forecast */}
             {todaysForecast && (
-              <DailyForecast
-                date={todaysForecast.date}
-                temperature={todaysForecast.temperature}
-                maxTemp={todaysForecast.maxTemp}
-                minTemp={todaysForecast.minTemp}
-                humidity={todaysForecast.humidity}
-                precipitation={todaysForecast.precipitation}
-                condition={todaysForecast.condition}
-                conditionIcon={todaysForecast.conditionIcon}
-                hourly={todaysForecast.hourly}
-                weeklyForecast={weatherData.slice(0, 7)}
-              />
+              <div className="mb-4 sm:mb-6">
+                <DailyForecast
+                  date={todaysForecast.date}
+                  temperature={todaysForecast.temperature}
+                  maxTemp={todaysForecast.maxTemp}
+                  minTemp={todaysForecast.minTemp}
+                  humidity={todaysForecast.humidity}
+                  precipitation={todaysForecast.precipitation}
+                  condition={todaysForecast.condition}
+                  conditionIcon={todaysForecast.conditionIcon}
+                  hourly={todaysForecast.hourly}
+                  weeklyForecast={weatherData.slice(0, 7)}
+                />
+              </div>
             )}
 
             {/* Current Weather Display */}
-            <div className="mb-6 mt-8 sm:mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="mb-4 sm:mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
               {currentWeather.map((sensor) => (
                 <motion.div
                   key={sensor.id}
@@ -192,19 +194,19 @@ const WeatherDashboard: React.FC = () => {
                   whileTap={{ scale: 0.95 }}
                 >
                   <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg rounded-xl overflow-hidden">
-                    <CardContent className="p-3 sm:p-4">
-                      <h2 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">Sensor {sensor.id}</h2>
-                      <div className="flex items-center justify-between mb-1 sm:mb-2">
-                        <Thermometer className="h-4 w-4 sm:h-5 sm:w-5" />
-                        <p className="text-sm sm:text-base">{sensor.temperature?.toFixed(1)}°C</p>
+                    <CardContent className="p-3">
+                      <h2 className="text-base sm:text-lg font-semibold mb-2">Sensor {sensor.id}</h2>
+                      <div className="flex items-center justify-between mb-1">
+                        <Thermometer className="h-4 w-4" />
+                        <p className="text-sm">{sensor.temperature?.toFixed(1)}°C</p>
                       </div>
-                      <div className="flex items-center justify-between mb-1 sm:mb-2">
-                        <Droplets className="h-4 w-4 sm:h-5 sm:w-5" />
-                        <p className="text-sm sm:text-base">{sensor.humidity?.toFixed(1)}%</p>
+                      <div className="flex items-center justify-between mb-1">
+                        <Droplets className="h-4 w-4" />
+                        <p className="text-sm">{sensor.humidity?.toFixed(1)}%</p>
                       </div>
                       <div className="flex items-center justify-between">
-                        <Wind className="h-4 w-4 sm:h-5 sm:w-5" />
-                        <p className="text-sm sm:text-base">{sensor.pressure?.toFixed(1)} hPa</p>
+                        <Wind className="h-4 w-4" />
+                        <p className="text-sm">{sensor.pressure?.toFixed(1)} hPa</p>
                       </div>
                     </CardContent>
                   </Card>
@@ -213,7 +215,7 @@ const WeatherDashboard: React.FC = () => {
             </div>
 
             {/* Date Selection Form */}
-            <form onSubmit={handleDateSubmit} className="mb-6 sm:mb-8 flex flex-col sm:flex-row flex-wrap gap-4 justify-center items-end">
+            <form onSubmit={handleDateSubmit} className="mb-4 sm:mb-6 flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center items-end">
               <div className="w-full sm:w-auto">
                 <label className="block mb-1 text-sm font-medium text-blue-900">Start Date</label>
                 <DatePicker
@@ -233,7 +235,7 @@ const WeatherDashboard: React.FC = () => {
                   placeholderText="dd-MM-yyyy"
                   maxDate={today}
                   dateFormat="dd-MM-yyyy"
-                  className="w-full px-3 py-2 bg-white/50 backdrop-blur-sm border border-white/50 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 bg-white/50 backdrop-blur-sm border border-white/50 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 />
               </div>
               <div className="w-full sm:w-auto">
@@ -249,16 +251,16 @@ const WeatherDashboard: React.FC = () => {
                   disabled={!startDate}
                   placeholderText="dd-MM-yyyy"
                   dateFormat="dd-MM-yyyy"
-                  className="w-full px-3 py-2 bg-white/50 backdrop-blur-sm border border-white/50 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 bg-white/50 backdrop-blur-sm border border-white/50 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 />
               </div>
-              <Button type="submit" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition duration-300 ease-in-out transform hover:scale-105">
+              <Button type="submit" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition duration-300 ease-in-out transform hover:scale-105 text-sm">
                 Get Forecast
               </Button>
             </form>
 
             {/* Weather Data Cards */}
-            <div className="mb-8 sm:mb-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            <div className="mb-4 sm:mb-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
               {(forecastData.length > 0 ? forecastData : weatherData).map((day, index) => (
                 <motion.div
                   key={index}
@@ -267,22 +269,22 @@ const WeatherDashboard: React.FC = () => {
                   transition={{ duration: 0.3, delay: index * 0.1 }}
                 >
                   <Card className="bg-white/80 backdrop-blur-sm shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                    <CardContent className="p-3 sm:p-4">
-                      <div className="flex justify-between items-center mb-2 sm:mb-3">
-                        <p className="font-semibold text-blue-900 text-sm sm:text-base">{new Date(day.date).toLocaleDateString()}</p>
-                        <img src={day.conditionIcon} alt={day.condition} className="w-8 h-8" />
+                    <CardContent className="p-3">
+                      <div className="flex justify-between items-center mb-2">
+                        <p className="font-semibold text-blue-900 text-xs sm:text-sm">{new Date(day.date).toLocaleDateString()}</p>
+                        <img src={day.conditionIcon} alt={day.condition} className="w-6 h-6 sm:w-8 sm:h-8" />
                       </div>
-                      <div className="flex items-center justify-between mb-1 sm:mb-2">
-                        <Thermometer className="h-4 w-4 sm:h-5 sm:w-5 text-red-500" />
-                        <p className="text-blue-800 text-sm sm:text-base">{day.temperature.toFixed(1)}°C</p>
+                      <div className="flex items-center justify-between mb-1">
+                        <Thermometer className="h-4 w-4 text-red-500" />
+                        <p className="text-blue-800 text-xs sm:text-sm">{day.temperature.toFixed(1)}°C</p>
                       </div>
-                      <div className="flex items-center justify-between mb-1 sm:mb-2">
-                        <Droplets className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500" />
-                        <p className="text-blue-800 text-sm sm:text-base">{day.humidity?.toFixed(1)}%</p>
+                      <div className="flex items-center justify-between mb-1">
+                        <Droplets className="h-4 w-4 text-blue-500" />
+                        <p className="text-blue-800 text-xs sm:text-sm">{day.humidity?.toFixed(1)}%</p>
                       </div>
                       <div className="flex items-center justify-between">
-                        <Wind className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" />
-                        <p className="text-blue-800 text-sm sm:text-base">{day.pressure?.toFixed(1)} hPa</p>
+                        <Wind className="h-4 w-4 text-gray-500" />
+                        <p className="text-blue-800 text-xs sm:text-sm">{day.pressure?.toFixed(1)} hPa</p>
                       </div>
                     </CardContent>
                   </Card>
@@ -291,29 +293,31 @@ const WeatherDashboard: React.FC = () => {
             </div>
 
             {/* Weather Charts */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {['temperature', 'humidity', 'pressure'].map((metric) => (
                 <Card key={metric} className="bg-white/80 backdrop-blur-sm shadow-lg rounded-xl overflow-hidden">
-                  <CardContent className="p-4 sm:p-6">
-                    <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 capitalize text-blue-900">{metric} Trend</h2>
-                    <ResponsiveContainer width="100%" height={250}>
-                      <LineChart data={chartData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#ccc" />
-                        <XAxis dataKey="date" stroke="#666" tick={{fontSize: 12}} />
-                        <YAxis stroke="#666" tick={{fontSize: 12}} />
-                        <Tooltip contentStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.8)', borderRadius: '8px', fontSize: '12px' }} />
-                        <Legend wrapperStyle={{fontSize: '12px'}} />
-                        <Line 
-                          type="monotone" 
-                          dataKey={metric} 
-                          stroke={metric === 'temperature' ? '#ef4444' : metric === 'humidity' ? '#3b82f6' : '#8b5cf6'} 
-                          strokeWidth={2}
-                          dot={{ stroke: 'white', strokeWidth: 2, fill: metric === 'temperature' ? '#ef4444' : metric === 'humidity' ? '#3b82f6' : '#8b5cf6', r: 3 }}
-                          activeDot={{ r: 5 }}
-                          name={`${metric.charAt(0).toUpperCase() + metric.slice(1)}`} 
-                        />
-                      </LineChart>
-                    </ResponsiveContainer>
+                  <CardContent className="p-3 sm:p-4">
+                    <h2 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3 capitalize text-blue-900">{metric} Trend</h2>
+                    <div className="h-48 sm:h-64">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={chartData}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#ccc" />
+                          <XAxis dataKey="date" stroke="#666" tick={{fontSize: 10}} />
+                          <YAxis stroke="#666" tick={{fontSize: 10}} />
+                          <Tooltip contentStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.8)', borderRadius: '8px', fontSize: '10px' }} />
+                          <Legend wrapperStyle={{fontSize: '10px'}} />
+                          <Line 
+                            type="monotone" 
+                            dataKey={metric} 
+                            stroke={metric === 'temperature' ? '#ef4444' : metric === 'humidity' ? '#3b82f6' : '#8b5cf6'} 
+                            strokeWidth={2}
+                            dot={{ stroke: 'white', strokeWidth: 2, fill: metric === 'temperature' ? '#ef4444' : metric === 'humidity' ? '#3b82f6' : '#8b5cf6', r: 3 }}
+                            activeDot={{ r: 5 }}
+                            name={`${metric.charAt(0).toUpperCase() + metric.slice(1)}`} 
+                          />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    </div>
                   </CardContent>
                 </Card>
               ))}
