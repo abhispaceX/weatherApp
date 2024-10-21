@@ -33,12 +33,9 @@ interface DailyForecastProps {
 const DailyForecast: React.FC<DailyForecastProps> = ({
   date,
   temperature,
-  maxTemp,
-  minTemp,
   humidity,
   precipitation,
-  condition,
-  conditionIcon,
+  condition, 
   hourly,
   weeklyForecast
 }) => {
